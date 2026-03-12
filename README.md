@@ -1,15 +1,13 @@
-## Reflection
+## Refleksi Design Pattern
 
-**1. What is the invariant structure of your game?**
-The invariant structure is the main game loop managed by the `RunSession` class. It strictly follows a fixed sequence: 
-dealing cards-> getting player input-> calculating the score->applying rewards or penalties->and opening the shop. 
-This exact order repeats every round and never changes.
+**1. Struktur Invarian**
+Struktur invarian dari game ini terletak pada kelas `RunSession`. Kelas ini bertugas mengatur *core loop* (siklus utama) permainan dengan urutan yang sudah pasti: membagikan kartu, menerima input pemain, menghitung skor, memberikan hadiah atau hukuman, lalu membuka toko. Urutan langkah-langkah ini sangat ketat dan tidak boleh berubah.
 
-**2. What parts are mutable?**
-The mutable parts are the specific mechanics and formulas inside the worker classes. For example, how the cards are randomized (`HandGenerator`), how poker hands are evaluated and scored (`ScoringSystem`), and how the money is calculated after a round (`RewardRule`). These rules can be modified without touching the main loop.
+**2. Bagian Mutable**
+Bagian yang Mutable (dapat diubah) adalah antarmuka (*interface*) beserta kelas-kelas pendukungnya. Contoh dari kelas pendukung ini adalah `HandGenerator` (mengatur cara kartu dibagikan), `ScoringSystem` (mengatur logika perhitungan kombinasi kartu), dan `RewardRule` (mengatur jumlah uang yang didapat). Aturan di dalam kelas-kelas pendukung ini bisa kita ganti secara bebas tanpa merusak alur utama permainan.
 
-**3. If you wanted to add a new feature, which class would change?**
-It depends on the feature, but the `RunSession` class will remain untouched. If I want to add a new poker hand combination or change the damage multiplier, I will only change the `ScoringSystem` class. If I want to add new items to buy, I will change the `ShopSystem` class. 
+**3. Penambahan Fitur Baru**
+Jika kita ingin menambah fitur baru, kelas `RunSession` sama sekali tidak perlu diubah. Kita hanya perlu mengubah atau menambah kelas pendukung dan *modifier* sesuai dengan fitur apa yang ingin kita buat. Misalnya, jika ingin menambah aturan skor baru, kita cukup memperbarui kelas `ScoringSystem`. Jika ingin menambah barang baru, kita cukup memperbarui kelas `ShopSystem`.
 
-**4. If you changed the loop order, what would break?**
-The game's logic and data flow would break. For example, if the system tries to calculate the score before the player inputs their cards, the damage will be zero. If the shop phase happens before the reward phase, the player will not be able to use the money they just earned from surviving the wave.
+**4. Dampak Perubahan Urutan Loop**
+Jika urutan *loop* diubah, logika dan aliran data game akan rusak. Sebagai contoh, jika sistem mencoba menghitung skor sebelum pemain memasukkan kartu, maka hasil *damage* yang keluar adalah nol. Contoh lain, jika fase toko diletakkan sebelum fase pembagian hadiah, pemain tidak akan bisa menggunakan uang yang baru saja mereka menangkan untuk membeli barang.
