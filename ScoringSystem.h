@@ -1,10 +1,9 @@
 #pragma once
-#include <iostream>
 #include <vector>
-#include <string>
+#include "Card.h"
 
-class ScoringSystem {
+class ScoringSystem
+{
 public:
-    // Menerima input array berisi kartu yang dipilih pemain
-    int PlayHand(const std::vector<std::string>& playedCards);
+    int EvaluateHand(const std::vector<Card> &playedCards);
 };
